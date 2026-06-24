@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ankith Karkera | IT Project Manager & AI Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --primary: #0f172a;
+  --secondary: #1e293b;
+  --accent: #06b6d4;
+  --accent-light: #67e8f9;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --surface: rgba(30, 41, 59, 0.6);
+  --border: rgba(148, 163, 184, 0.1);
+  --gradient-end: #8b5cf6;
+  --success: #10b981;
+  --warning: #f59e0b;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--primary);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+.bg-animation {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -1; overflow: hidden;
+}
+.bg-animation::before {
+  content: '';
+  position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle at 20% 80%, rgba(6,182,212,0.08) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(139,92,246,0.08) 0%, transparent 50%),
+              radial-gradient(circle at 50% 50%, rgba(6,182,212,0.03) 0%, transparent 70%);
+  animation: bgFloat 20s ease-in-out infinite;
+}
+@keyframes bgFloat {
+  0%, 100% { transform: translate(0,0) rotate(0deg); }
+  33% { transform: translate(30px,-30px) rotate(1deg); }
+  66% { transform: translate(-20px,20px) rotate(-1deg); }
+}
+.grid-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+  background-size: 60px 60px; z-index: -1; pointer-events: none;
+}
+nav {
+  position: fixed; top: 0; width: 100%; padding: 1.2rem 5%;
+  display: flex; justify-content: space-between; align-items: center;
+  z-index: 1000; background: rgba(15,23,42,0.8); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); transition: all 0.3s ease;
+}
+nav.scrolled { padding: 0.8rem 5%; box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--gradient-end));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+  transition: color 0.3s ease; position: relative;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -6px; left: 0; width: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--gradient-end)); transition: width 0.3s ease;
+}
+.nav-links a:hover::after { width: 100%; }
+.mobile-menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 8rem 5% 4rem; position: relative;
+}
+.hero-content { max-width: 900px; text-align: center; animation: fadeInUp 1s ease-out; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 1.2rem; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 50px; font-size: 0.85rem; color: var(--accent); margin-bottom: 2rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(6,182,212,0.2); } 50% { box-shadow: 0 0 0 10px rgba(6,182,212,0); } }
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--text) 0%, var(--accent-light) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--gradient-end));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-subtitle { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.7; }
+.hero-stats { display: flex; justify-content: center; gap: 3rem; margin-bottom: 3rem; flex-wrap: wrap; }
+.stat-item { text-align: center; }
+.stat-number { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); display: block; }
+.stat-label { font-size: 0.85rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.btn {
+  padding: 1rem 2.5rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600;
+  text-decoration: none; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem;
+  cursor: pointer; border: none;
+}
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--gradient-end)); color: white; box-shadow: 0 4px 20px rgba(6,182,212,0.3); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(6,182,212,0.4); }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--secondary); border-color: var(--accent); color: var(--accent); }
+
+section { padding: 6rem 5%; position: relative; }
+.section-header { text-align: center; margin-bottom: 4rem; }
+.section-tag {
+  display: inline-block; padding: 0.4rem 1rem; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 50px; font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;
+}
+.section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 1rem; }
+.section-desc { color: var(--text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+.about-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; backdrop-filter: blur(10px); }
+.about-card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.about-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--gradient-end)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; }
+.about-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 600; }
+.about-card-subtitle { font-size: 0.85rem; color: var(--text-dim); }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.skill-tag { padding: 0.4rem 1rem; background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); border-radius: 50px; font-size: 0.8rem; color: var(--accent-light); }
+.about-text h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; margin-bottom: 1rem; }
+.about-text p { color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.8; }
+.about-highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.highlight-item { display: flex; align-items: flex-start; gap: 0.75rem; }
+.highlight-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(6,182,212,0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1rem; flex-shrink: 0; }
+.highlight-text h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
+.highlight-text p { font-size: 0.85rem; color: var(--text-dim); margin: 0; }
+
+.projects-section { background: linear-gradient(180deg, transparent 0%, rgba(6,182,212,0.02) 50%, transparent 100%); }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+.project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; transition: all 0.4s ease; position: relative; }
+.project-card:hover { transform: translateY(-8px); border-color: rgba(6,182,212,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(6,182,212,0.1); }
+.project-card.featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1.2fr 1fr; }
+
+.project-visual { position: relative; min-height: 350px; background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(139,92,246,0.1)); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.project-visual::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 30% 30%, rgba(6,182,212,0.15) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(139,92,246,0.15) 0%, transparent 50%); }
+
+.shift-planner-demo { position: relative; width: 90%; max-width: 500px; background: var(--primary); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.demo-header { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; background: var(--secondary); border-bottom: 1px solid var(--border); }
+.demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+.demo-dot.red { background: #ef4444; }
+.demo-dot.yellow { background: #f59e0b; }
+.demo-dot.green { background: #10b981; }
+.demo-title { margin-left: auto; font-size: 0.75rem; color: var(--text-dim); }
+.demo-body { padding: 1rem; }
+.demo-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.3rem; margin-bottom: 1rem; }
+.demo-day-header { text-align: center; font-size: 0.65rem; color: var(--text-dim); padding: 0.3rem; }
+.demo-day { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; position: relative; cursor: pointer; transition: all 0.2s ease; }
+.demo-day:hover { transform: scale(1.1); }
+.demo-day.empty { background: transparent; }
+.demo-day.morning { background: rgba(6,182,212,0.2); color: var(--accent-light); }
+.demo-day.evening { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+.demo-day.night { background: rgba(15,23,42,0.8); color: var(--text-muted); border: 1px solid var(--border); }
+.demo-day.off { background: rgba(16,185,129,0.15); color: var(--success); }
+.demo-legend { display: flex; gap: 1rem; justify-content: center; font-size: 0.7rem; }
+.legend-item { display: flex; align-items: center; gap: 0.3rem; }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+.demo-search { display: flex; gap: 0.5rem; margin-top: 1rem; padding: 0.5rem; background: var(--secondary); border-radius: 8px; border: 1px solid var(--border); }
+.demo-search input { flex: 1; background: transparent; border: none; color: var(--text); font-size: 0.8rem; outline: none; }
+.demo-search input::placeholder { color: var(--text-dim); }
+.demo-search-btn { background: var(--accent); border: none; color: white; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+
+.project-info { padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+.project-tag { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); border-radius: 50px; font-size: 0.8rem; color: var(--accent); margin-bottom: 1.5rem; width: fit-content; }
+.project-info h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
+.project-info p { color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.7; }
+.project-features { list-style: none; margin-bottom: 2rem; }
+.project-features li { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; color: var(--text-muted); font-size: 0.9rem; }
+.project-features li i { color: var(--accent); font-size: 0.8rem; }
+.project-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+.tech-badge { padding: 0.3rem 0.8rem; background: var(--secondary); border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; color: var(--text-muted); }
+.project-links { display: flex; gap: 1rem; }
+.project-link { padding: 0.75rem 1.5rem; border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
+.project-link.primary { background: linear-gradient(135deg, var(--accent), var(--gradient-end)); color: white; }
+.project-link.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(6,182,212,0.3); }
+.project-link.secondary { background: var(--secondary); color: var(--text); border: 1px solid var(--border); }
+.project-link.secondary:hover { border-color: var(--accent); color: var(--accent); }
+.project-impact { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.impact-item { text-align: center; }
+.impact-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.impact-label { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+.powerbi-visual { position: relative; min-height: 350px; background: linear-gradient(135deg, rgba(243,146,55,0.1), rgba(6,182,212,0.1)); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.powerbi-visual::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 80%, rgba(243,146,55,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(6,182,212,0.1) 0%, transparent 50%); }
+.powerbi-dashboard { position: relative; width: 90%; max-width: 500px; background: var(--primary); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--secondary); border-bottom: 1px solid var(--border); }
+.dashboard-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600; }
+.dashboard-filters { display: flex; gap: 0.5rem; }
+.filter-btn { padding: 0.3rem 0.8rem; background: var(--primary); border: 1px solid var(--border); border-radius: 6px; font-size: 0.7rem; color: var(--text-muted); }
+.dashboard-body { padding: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.dash-card { background: var(--secondary); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+.dash-card.full-width { grid-column: 1 / -1; }
+.dash-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+.dash-card-title { font-size: 0.75rem; color: var(--text-dim); }
+.dash-card-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.dash-card-value.warning { color: var(--warning); }
+.dash-card-value.success { color: var(--success); }
+.mini-chart { height: 40px; display: flex; align-items: flex-end; gap: 3px; }
+.chart-bar { flex: 1; background: linear-gradient(to top, var(--accent), rgba(6,182,212,0.3)); border-radius: 2px 2px 0 0; }
+
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+.skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; transition: all 0.3s ease; }
+.skill-card:hover { border-color: rgba(6,182,212,0.3); transform: translateY(-4px); }
+.skill-icon { width: 50px; height: 50px; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--gradient-end)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white; margin-bottom: 1.5rem; }
+.skill-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-bottom: 1rem; }
+.skill-list { list-style: none; }
+.skill-list li { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; color: var(--text-muted); font-size: 0.9rem; }
+.skill-list li i { color: var(--accent); font-size: 0.7rem; }
+
+.timeline { max-width: 800px; margin: 0 auto; position: relative; }
+.timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), var(--gradient-end)); }
+.timeline-item { position: relative; padding-left: 60px; padding-bottom: 3rem; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot { position: absolute; left: 11px; top: 5px; width: 20px; height: 20px; border-radius: 50%; background: var(--primary); border: 3px solid var(--accent); box-shadow: 0 0 0 4px rgba(6,182,212,0.2); }
+.timeline-content { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease; }
+.timeline-content:hover { border-color: rgba(6,182,212,0.3); }
+.timeline-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem; }
+.timeline-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; }
+.timeline-date { font-size: 0.8rem; color: var(--accent); background: rgba(6,182,212,0.1); padding: 0.3rem 0.8rem; border-radius: 50px; }
+.timeline-company { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; }
+.timeline-achievements { list-style: none; }
+.timeline-achievements li { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.4rem 0; color: var(--text-muted); font-size: 0.9rem; }
+.timeline-achievements li::before { content: '->'; color: var(--accent); font-weight: bold; }
+
+.contact-section { background: linear-gradient(180deg, transparent 0%, rgba(6,182,212,0.03) 100%); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1000px; margin: 0 auto; align-items: center; }
+.contact-info h3 { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 1rem; }
+.contact-info p { color: var(--text-muted); margin-bottom: 2rem; }
+.contact-links { display: flex; flex-direction: column; gap: 1rem; }
+.contact-link { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; color: var(--text); transition: all 0.3s ease; }
+.contact-link:hover { border-color: var(--accent); transform: translateX(8px); }
+.contact-link i { width: 40px; height: 40px; border-radius: 10px; background: rgba(6,182,212,0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); }
+.contact-link-text { display: flex; flex-direction: column; }
+.contact-link-label { font-size: 0.8rem; color: var(--text-dim); }
+.contact-link-value { font-weight: 600; font-size: 0.95rem; }
+.contact-form { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; }
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.form-group input, .form-group textarea { width: 100%; padding: 0.875rem 1rem; background: var(--primary); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.95rem; transition: all 0.3s ease; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(6,182,212,0.1); }
+.form-group textarea { min-height: 120px; resize: vertical; }
+.submit-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, var(--accent), var(--gradient-end)); border: none; border-radius: 12px; color: white; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(6,182,212,0.3); }
+
+footer { padding: 3rem 5%; text-align: center; border-top: 1px solid var(--border); }
+.footer-text { color: var(--text-dim); font-size: 0.9rem; }
+.footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+.footer-social a { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; transition: all 0.3s ease; }
+.footer-social a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+
+.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 968px) {
+  .about-grid, .contact-grid { grid-template-columns: 1fr; }
+  .project-card.featured { grid-template-columns: 1fr; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--primary); flex-direction: column; padding: 2rem; gap: 1.5rem; border-bottom: 1px solid var(--border); }
+  .nav-links.active { display: flex; }
+  .mobile-menu-btn { display: block; }
+  .hero-stats { gap: 2rem; }
+  .about-highlights { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .hero h1 { font-size: 2.2rem; }
+  .hero-subtitle { font-size: 1rem; }
+  .stat-number { font-size: 2rem; }
+  .hero-stats { gap: 1.5rem; }
+  .project-impact { grid-template-columns: 1fr; }
+  .timeline::before { left: 15px; }
+  .timeline-item { padding-left: 45px; }
+  .timeline-dot { left: 6px; width: 16px; height: 16px; }
+}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--primary); }
+::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+<div class="bg-animation"></div>
+<div class="grid-overlay"></div>
+
+<nav id="navbar">
+  <div class="nav-logo">AK</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
+      Available for Opportunities in UAE
+    </div>
+    <h1>
+      IT Project Manager &<br>
+      <span class="highlight">AI Solution Developer</span>
+    </h1>
+    <p class="hero-subtitle">
+      Building intelligent automation systems and leading digital transformation 
+      across GCC, Europe, and global markets. 8+ years of delivering enterprise-scale impact.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-number">8+</span><span class="stat-label">Years Experience</span></div>
+      <div class="stat-item"><span class="stat-number">100+</span><span class="stat-label">Projects Delivered</span></div>
+      <div class="stat-item"><span class="stat-number">$360K</span><span class="stat-label">Budget Managed</span></div>
+      <div class="stat-item"><span class="stat-number">32%</span><span class="stat-label">Cost Reduction</span></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary"><i class="fas fa-rocket"></i> View My Projects</a>
+      <a href="#contact" class="btn btn-secondary"><i class="fas fa-envelope"></i> Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="reveal">
+  <div class="section-header">
+    <span class="section-tag">About Me</span>
+    <h2 class="section-title">Bridging Project Management & AI Innovation</h2>
+    <p class="section-desc">I combine enterprise PMO governance with hands-on technical development to deliver solutions that drive measurable business outcomes.</p>
+  </div>
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-card">
+        <div class="about-card-header">
+          <div class="about-avatar">AK</div>
+          <div>
+            <div class="about-card-title">Ankith Karkera</div>
+            <div class="about-card-subtitle">IT Project Manager | Abu Dhabi, UAE</div>
+          </div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+          <i class="fas fa-map-marker-alt" style="color: var(--accent); margin-right: 0.5rem;"></i>Abu Dhabi, UAE &nbsp;|&nbsp; 
+          <i class="fas fa-passport" style="color: var(--accent); margin-right: 0.5rem;"></i>Indian &nbsp;|&nbsp;
+          <i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem;"></i>Immediately Available
+        </p>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span><span class="skill-tag">SQLite</span><span class="skill-tag">Power BI</span><span class="skill-tag">AI/ML</span>
+          <span class="skill-tag">PMO Governance</span><span class="skill-tag">Lean Six Sigma</span><span class="skill-tag">Agile/Scrum</span><span class="skill-tag">OAuth2</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-text">
+      <h3>From Mechanical Engineering to AI-Powered Project Leadership</h3>
+      <p>With an MSc from SKEMA Business School and a BEng in Mechanical Engineering, I have built a unique career at the intersection of technical depth and strategic project management. Currently leading IT portfolios at XY Retail across 7 global regions, I recently developed an AI-powered Shift Planning System that reduced manual scheduling time by 80% for 50+ employees.</p>
+      <p>My approach combines Lean Six Sigma Black Belt methodology with modern full-stack development — delivering not just governance, but working solutions that teams actually use.</p>
+      <div class="about-highlights">
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-certificate"></i></div>
+          <div class="highlight-text"><h4>CAPM Certified</h4><p>PMP In Progress</p></div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-award"></i></div>
+          <div class="highlight-text"><h4>Lean Six Sigma</h4><p>Black Belt Active</p></div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-globe"></i></div>
+          <div class="highlight-text"><h4>Global Experience</h4><p>GCC, Europe, US, India</p></div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-code"></i></div>
+          <div class="highlight-text"><h4>Full-Stack Dev</h4><p>Python, JS, SQL, APIs</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="projects-section reveal">
+  <div class="section-header">
+    <span class="section-tag">Featured Projects</span>
+    <h2 class="section-title">AI Solutions & PMO Automation</h2>
+    <p class="section-desc">Production-ready tools built from concept to deployment, delivering measurable operational impact across enterprise environments.</p>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card featured">
+      <div class="project-visual">
+        <div class="shift-planner-demo">
+          <div class="demo-header">
+            <div class="demo-dot red"></div><div class="demo-dot yellow"></div><div class="demo-dot green"></div>
+            <span class="demo-title">AI Shift Planner v2.1</span>
+          </div>
+          <div class="demo-body">
+            <div class="demo-calendar">
+              <div class="demo-day-header">Mon</div><div class="demo-day-header">Tue</div><div class="demo-day-header">Wed</div><div class="demo-day-header">Thu</div><div class="demo-day-header">Fri</div><div class="demo-day-header">Sat</div><div class="demo-day-header">Sun</div>
+              <div class="demo-day empty"></div><div class="demo-day morning">1</div><div class="demo-day evening">2</div><div class="demo-day morning">3</div><div class="demo-day evening">4</div><div class="demo-day off">5</div><div class="demo-day night">6</div>
+              <div class="demo-day morning">7</div><div class="demo-day morning">8</div><div class="demo-day evening">9</div><div class="demo-day off">10</div><div class="demo-day morning">11</div><div class="demo-day evening">12</div><div class="demo-day night">13</div>
+              <div class="demo-day evening">14</div><div class="demo-day morning">15</div><div class="demo-day morning">16</div><div class="demo-day evening">17</div><div class="demo-day off">18</div><div class="demo-day morning">19</div><div class="demo-day night">20</div>
+              <div class="demo-day morning">21</div><div class="demo-day evening">22</div><div class="demo-day off">23</div><div class="demo-day morning">24</div><div class="demo-day evening">25</div><div class="demo-day morning">26</div><div class="demo-day night">27</div>
+              <div class="demo-day evening">28</div><div class="demo-day morning">29</div><div class="demo-day morning">30</div><div class="demo-day empty"></div><div class="demo-day empty"></div><div class="demo-day empty"></div><div class="demo-day empty"></div>
+            </div>
+            <div class="demo-legend">
+              <div class="legend-item"><div class="legend-dot" style="background: var(--accent);"></div><span>Morning</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background: #8b5cf6;"></div><span>Evening</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background: var(--success);"></div><span>Off</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background: var(--text-dim);"></div><span>Night</span></div>
+            </div>
+            <div class="demo-search">
+              <input type="text" placeholder="Fuzzy search employee..." readonly>
+              <button class="demo-search-btn"><i class="fas fa-search"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-tag"><i class="fas fa-star"></i>Featured Project</div>
+        <h3>AI-Powered Shift Planner System</h3>
+        <p>A complete workforce management system built from scratch using Python, SQLite, and Google OAuth2. Features real-time calendar views, fuzzy search algorithms, auto-shift generation engine, and role-based access control. Deployed at XY Retail for 50+ employees across luxury retail stores (Armani, Damiani, Slowear).</p>
+        <ul class="project-features">
+          <li><i class="fas fa-check"></i> Real-time interactive calendar grid with drag-drop</li>
+          <li><i class="fas fa-check"></i> Fuzzy search algorithm for employee lookup</li>
+          <li><i class="fas fa-check"></i> Auto-generation engine for shift optimization</li>
+          <li><i class="fas fa-check"></i> Google OAuth2 SSO integration</li>
+          <li><i class="fas fa-check"></i> Excel/CSV export automation via openpyxl</li>
+          <li><i class="fas fa-check"></i> Email reporting with smtplib</li>
+          <li><i class="fas fa-check"></i> Archive management & role-based access</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-badge">Python</span><span class="tech-badge">SQLite</span><span class="tech-badge">JavaScript</span><span class="tech-badge">HTML/CSS</span>
+          <span class="tech-badge">REST APIs</span><span class="tech-badge">OAuth2</span><span class="tech-badge">openpyxl</span><span class="tech-badge">smtplib</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/ankithkarkera" target="_blank" class="project-link primary"><i class="fab fa-github"></i>View on GitHub</a>
+          <a href="#contact" class="project-link secondary"><i class="fas fa-play"></i>Live Demo</a>
+        </div>
+        <div class="project-impact">
+          <div class="impact-item"><div class="impact-value">80%</div><div class="impact-label">Time Reduction</div></div>
+          <div class="impact-item"><div class="impact-value">50+</div><div class="impact-label">Employees Managed</div></div>
+          <div class="impact-item"><div class="impact-value">6</div><div class="impact-label">Report Types Auto-Gen</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-visual powerbi-visual">
+        <div class="powerbi-dashboard">
+          <div class="dashboard-header">
+            <span class="dashboard-title">IT Portfolio Dashboard</span>
+            <div class="dashboard-filters"><span class="filter-btn">Q2 2024</span><span class="filter-btn">All Regions</span></div>
+          </div>
+          <div class="dashboard-body">
+            <div class="dash-card">
+              <div class="dash-card-header"><span class="dash-card-title">Active Projects</span><i class="fas fa-ellipsis-h" style="color: var(--text-dim); font-size: 0.8rem;"></i></div>
+              <div class="dash-card-value">127</div>
+              <div class="mini-chart"><div class="chart-bar" style="height: 40%;"></div><div class="chart-bar" style="height: 60%;"></div><div class="chart-bar" style="height: 80%;"></div><div class="chart-bar" style="height: 45%;"></div><div class="chart-bar" style="height: 90%;"></div><div class="chart-bar" style="height: 70%;"></div><div class="chart-bar" style="height: 100%;"></div></div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-header"><span class="dash-card-title">Budget Utilization</span><i class="fas fa-ellipsis-h" style="color: var(--text-dim); font-size: 0.8rem;"></i></div>
+              <div class="dash-card-value warning">87%</div>
+              <div style="margin-top: 0.5rem;"><div style="background: var(--primary); height: 6px; border-radius: 3px; overflow: hidden;"><div style="width: 87%; height: 100%; background: linear-gradient(90deg, var(--warning), var(--accent)); border-radius: 3px;"></div></div></div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-header"><span class="dash-card-title">On-Time Delivery</span><i class="fas fa-ellipsis-h" style="color: var(--text-dim); font-size: 0.8rem;"></i></div>
+              <div class="dash-card-value success">96%</div>
+              <div style="margin-top: 0.5rem;"><div style="background: var(--primary); height: 6px; border-radius: 3px; overflow: hidden;"><div style="width: 96%; height: 100%; background: linear-gradient(90deg, var(--success), var(--accent)); border-radius: 3px;"></div></div></div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-header"><span class="dash-card-title">Risk Score</span><i class="fas fa-ellipsis-h" style="color: var(--text-dim); font-size: 0.8rem;"></i></div>
+              <div class="dash-card-value" style="color: var(--accent-light);">Low</div>
+              <div style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-dim);"><i class="fas fa-arrow-down" style="color: var(--success);"></i> 12% vs last month</div>
+            </div>
+            <div class="dash-card full-width">
+              <div class="dash-card-header"><span class="dash-card-title">Portfolio Timeline</span><span style="font-size: 0.7rem; color: var(--accent);">View Details -></span></div>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <div style="flex: 3; background: linear-gradient(90deg, var(--accent), var(--gradient-end)); height: 24px; border-radius: 6px; display: flex; align-items: center; padding: 0 0.5rem; font-size: 0.7rem;">Project Alpha</div>
+                <div style="flex: 2; background: linear-gradient(90deg, var(--gradient-end), var(--accent)); height: 24px; border-radius: 6px; display: flex; align-items: center; padding: 0 0.5rem; font-size: 0.7rem;">Beta</div>
+                <div style="flex: 4; background: linear-gradient(90deg, var(--accent), var(--success)); height: 24px; border-radius: 6px; display: flex; align-items: center; padding: 0 0.5rem; font-size: 0.7rem;">Gamma</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-tag"><i class="fas fa-chart-line"></i>PMO Automation</div>
+        <h3>Reusable Power BI PMO Dashboard Templates</h3>
+        <p>A comprehensive suite of reusable Power BI templates for IT portfolio tracking, reducing report development time by 60%. Features DAX-powered KPIs, automated data refresh, and interactive drill-through capabilities for C-suite visibility.</p>
+        <ul class="project-features">
+          <li><i class="fas fa-check"></i> 6 automated report types (Coverage, Attendance, Summary)</li>
+          <li><i class="fas fa-check"></i> DAX measures for real-time KPI calculation</li>
+          <li><i class="fas fa-check"></i> Power Query ETL pipelines for data transformation</li>
+          <li><i class="fas fa-check"></i> Interactive drill-through by region/project</li>
+          <li><i class="fas fa-check"></i> Risk indicator heatmaps with conditional formatting</li>
+          <li><i class="fas fa-check"></i> Budget variance analysis with trend forecasting</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-badge">Power BI</span><span class="tech-badge">DAX</span><span class="tech-badge">Power Query</span><span class="tech-badge">SQL</span><span class="tech-badge">Excel</span><span class="tech-badge">Python</span>
+        </div>
+        <div class="project-links">
+          <a href="#contact" class="project-link primary"><i class="fas fa-download"></i>Request Template</a>
+          <a href="#contact" class="project-link secondary"><i class="fas fa-images"></i>View Gallery</a>
+        </div>
+        <div class="project-impact">
+          <div class="impact-item"><div class="impact-value">60%</div><div class="impact-label">Time Saved</div></div>
+          <div class="impact-item"><div class="impact-value">100+</div><div class="impact-label">Projects Tracked</div></div>
+          <div class="impact-item"><div class="impact-value">7</div><div class="impact-label">Global Regions</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="reveal">
+  <div class="section-header">
+    <span class="section-tag">Technical Arsenal</span>
+    <h2 class="section-title">Skills & Technologies</h2>
+    <p class="section-desc">A balanced stack spanning AI development, project governance, data analytics, and cloud infrastructure.</p>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon"><i class="fas fa-brain"></i></div>
+      <h3>AI & Development</h3>
+      <ul class="skill-list">
+        <li><i class="fas fa-chevron-right"></i> Python (Primary)</li>
+        <li><i class="fas fa-chevron-right"></i> SQLite Database Design</li>
+        <li><i class="fas fa-chevron-right"></i> JavaScript / HTML / CSS</li>
+        <li><i class="fas fa-chevron-right"></i> REST API Design</li>
+        <li><i class="fas fa-chevron-right"></i> OAuth2 / Google Cloud Console</li>
+        <li><i class="fas fa-chevron-right"></i> openpyxl / CSV Automation</li>
+        <li><i class="fas fa-chevron-right"></i> GitHub / Git</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon"><i class="fas fa-project-diagram"></i></div>
+      <h3>PMO & Portfolio</h3>
+      <ul class="skill-list">
+        <li><i class="fas fa-chevron-right"></i> MS Project / JIRA Admin</li>
+        <li><i class="fas fa-chevron-right"></i> Confluence / ServiceNow</li>
+        <li><i class="fas fa-chevron-right"></i> Salesforce CRM</li>
+        <li><i class="fas fa-chevron-right"></i> Monday.com / Asana / Trello</li>
+        <li><i class="fas fa-chevron-right"></i> Agile / Scrum / SAFe</li>
+        <li><i class="fas fa-chevron-right"></i> PRINCE2 / Waterfall / Hybrid</li>
+        <li><i class="fas fa-chevron-right"></i> Lean Six Sigma (Black Belt)</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon"><i class="fas fa-chart-pie"></i></div>
+      <h3>Data & Analytics</h3>
+      <ul class="skill-list">
+        <li><i class="fas fa-chevron-right"></i> Power BI (DAX, Power Query)</li>
+        <li><i class="fas fa-chevron-right"></i> Advanced Excel (Pivot, VLOOKUP)</li>
+        <li><i class="fas fa-chevron-right"></i> SQL / Tableau</li>
+        <li><i class="fas fa-chevron-right"></i> KPI Dashboards & Metrics</li>
+        <li><i class="fas fa-chevron-right"></i> Predictive Reporting</li>
+        <li><i class="fas fa-chevron-right"></i> Trend Analysis</li>
+        <li><i class="fas fa-chevron-right"></i> Google Data Studio</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon"><i class="fas fa-cloud"></i></div>
+      <h3>Cloud & Platforms</h3>
+      <ul class="skill-list">
+        <li><i class="fas fa-chevron-right"></i> AWS (Basics)</li>
+        <li><i class="fas fa-chevron-right"></i> Google Cloud Platform</li>
+        <li><i class="fas fa-chevron-right"></i> Microsoft Azure (Fundamentals)</li>
+        <li><i class="fas fa-chevron-right"></i> SharePoint / Office 365</li>
+        <li><i class="fas fa-chevron-right"></i> Slack / Teams / Zoom</li>
+        <li><i class="fas fa-chevron-right"></i> DevOps / CI/CD Pipelines</li>
+        <li><i class="fas fa-chevron-right"></i> Web Server Deployment</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="reveal">
+  <div class="section-header">
+    <span class="section-tag">Career Journey</span>
+    <h2 class="section-title">Professional Experience</h2>
+    <p class="section-desc">8+ years of delivering technology portfolios across luxury retail, government e-marketplaces, gaming, and European markets.</p>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-header">
+          <span class="timeline-title">IT Project Manager — Portfolio, Tracking & Reporting</span>
+          <span class="timeline-date">Jul 2024 – Present</span>
+        </div>
+        <div class="timeline-company">XY Retail | Abu Dhabi, UAE (Luxury Retail: Armani, Damiani, Slowear) | Reporting to COO</div>
+        <ul class="timeline-achievements">
+          <li>Manage 100+ concurrent IT projects across 7 global regions (GCC, US, Europe, EMEA, India)</li>
+          <li>Maintain sub-1% quarterly escalation rate against 4-hour resolution SLAs</li>
+          <li>Deliver $360K programme budget with full P&L accountability</li>
+          <li>Built AI-powered Shift Planning System (Python + SQLite + Google OAuth2) — 80% time reduction</li>
+          <li>Design Power BI dashboards for C-suite visibility on KPIs and delivery performance</li>
+          <li>Manage 6 external technology vendors with live risk registers and mitigation dashboards</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-header">
+          <span class="timeline-title">IT Program Manager — Portfolio & PMO</span>
+          <span class="timeline-date">Dec 2023 – Jun 2024</span>
+        </div>
+        <div class="timeline-company">Shake Deal | Dubai, UAE (Government E-Marketplace) | Reporting to CEO</div>
+        <ul class="timeline-achievements">
+          <li>Managed IT project portfolio for Government E-Marketplace (GEM) digital platform</li>
+          <li>Delivered 32% budget reduction (~$19K saved) within Q1 via Lean Six Sigma</li>
+          <li>Maintained dashboards and performance reports for CEO/CTO visibility</li>
+          <li>Ensured full compliance with Government E-Marketplace regulatory requirements</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-header">
+          <span class="timeline-title">IT Project Analyst — PMO Support</span>
+          <span class="timeline-date">Oct 2022 – Nov 2023</span>
+        </div>
+        <div class="timeline-company">Juego Studios | Remote / India (Multi-Concurrent Digital Game Projects)</div>
+        <ul class="timeline-achievements">
+          <li>Tracked and documented IT projects maintaining comprehensive PMO records</li>
+          <li>Achieved 95%+ on-time delivery and 15% cycle time reduction</li>
+          <li>Supported risk management strategies across all concurrent workstreams</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-header">
+          <span class="timeline-title">Project Business Developer</span>
+          <span class="timeline-date">Mar 2019 – Aug 2022</span>
+        </div>
+        <div class="timeline-company">STSicily | Palermo, Italy (European & MENA Markets)</div>
+        <ul class="timeline-achievements">
+          <li>Managed project portfolio tracking across European and MENA markets</li>
+          <li>Promoted adoption of Power BI and Advanced Excel reporting tools</li>
+          <li>Grew market visibility by 40% through structured portfolio governance</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-header">
+          <span class="timeline-title">Project Coordinator</span>
+          <span class="timeline-date">Jan 2017 – Aug 2018</span>
+        </div>
+        <div class="timeline-company">Plant-Tech Industrial Services | India (IT & Engineering Projects)</div>
+        <ul class="timeline-achievements">
+          <li>Supported IT and engineering project tracking and documentation</li>
+          <li>Ensured full compliance with organisational policies and HSE requirements</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact-section reveal">
+  <div class="section-header">
+    <span class="section-tag">Get In Touch</span>
+    <h2 class="section-title">Let's Build Something Together</h2>
+    <p class="section-desc">Open to IT Project Management roles, AI consulting, and PMO automation projects in the UAE and globally.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>Ready to Connect?</h3>
+      <p>Whether you are looking for a project manager who can also build the tools your team needs, or want to discuss AI-powered automation for your operations, I would love to hear from you.</p>
+      <div class="contact-links">
+        <a href="mailto:ankitkarkera42@gmail.com" class="contact-link">
+          <i class="fas fa-envelope"></i>
+          <div class="contact-link-text">
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-value">ankitkarkera42@gmail.com</span>
+          </div>
+        </a>
+        <a href="tel:+971567079531" class="contact-link">
+          <i class="fas fa-phone"></i>
+          <div class="contact-link-text">
+            <span class="contact-link-label">Phone</span>
+            <span class="contact-link-value">+971 56 707 9531</span>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/ankithkarkera" target="_blank" class="contact-link">
+          <i class="fab fa-linkedin-in"></i>
+          <div class="contact-link-text">
+            <span class="contact-link-label">LinkedIn</span>
+            <span class="contact-link-value">linkedin.com/in/ankithkarkera</span>
+          </div>
+        </a>
+        <a href="https://github.com/ankithkarkera" target="_blank" class="contact-link">
+          <i class="fab fa-github"></i>
+          <div class="contact-link-text">
+            <span class="contact-link-label">GitHub</span>
+            <span class="contact-link-value">github.com/ankithkarkera</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <form onsubmit="event.preventDefault(); alert('Thank you for reaching out! I will get back to you shortly.');">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="john@company.com" required>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" placeholder="Project Inquiry / Collaboration">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Tell me about your project or opportunity..." required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-social">
+    <a href="https://linkedin.com/in/ankithkarkera" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+    <a href="https://github.com/ankithkarkera" target="_blank"><i class="fab fa-github"></i></a>
+    <a href="mailto:ankitkarkera42@gmail.com"><i class="fas fa-envelope"></i></a>
+  </div>
+  <p class="footer-text">Ankith Karkera | IT Project Manager & AI Developer | Abu Dhabi, UAE</p>
+  <p class="footer-text" style="margin-top: 0.5rem; font-size: 0.8rem;">Built with passion, Python, and a lot of coffee.</p>
+</footer>
+
+<script>
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
+});
+
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const navLinks = document.getElementById('navLinks');
+mobileMenuBtn.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => { navLinks.classList.remove('active'); });
+});
+
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
+}, { threshold: 0.1 });
+revealElements.forEach(el => revealObserver.observe(el));
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+</body>
+</html>
