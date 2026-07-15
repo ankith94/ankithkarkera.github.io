@@ -807,11 +807,12 @@ if (contactForm) {
     submitBtn.disabled = true;
 
     const templateParams = {
+      to_name: 'Ankith',
       from_name: name,
       from_email: email,
+      reply_to: email,
       subject: subject || 'Portfolio Enquiry',
-      message: message,
-      to_email: 'ankitkarkera42@gmail.com'
+      message: message
     };
 
     emailjs.send('service_4stgsed', 'template_2r3h9uq', templateParams)
@@ -826,9 +827,11 @@ if (contactForm) {
       })
       .catch(function(error) {
         console.error('EmailJS Error:', error);
+        let errorMsg = 'Something went wrong.';
+        if (error && error.text) errorMsg += ' (' + error.text + ')';
         formStatus.style.display = 'block';
         formStatus.style.color = '#ef4444';
-        formStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Something went wrong. Please email me directly at <a href="mailto:ankitkarkera42@gmail.com" style="color: var(--accent); text-decoration: underline;">ankitkarkera42@gmail.com</a>';
+        formStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + errorMsg + ' Please email me directly at <a href="mailto:ankitkarkera42@gmail.com" style="color: var(--accent); text-decoration: underline;">ankitkarkera42@gmail.com</a>';
         submitBtn.innerHTML = 'Send Message';
         submitBtn.disabled = false;
         setTimeout(() => { formStatus.style.display = 'none'; }, 6000);
