@@ -751,31 +751,49 @@ footer { padding: 3rem 5%; text-align: center; border-top: 1px solid var(--borde
 </footer>
 
 <script>
-// EmailJS Contact Form - sends templated emails directly to your inbox
+// Contact Form - uses EmailJS if configured, otherwise opens email client
 const contactForm = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 const formStatus = document.getElementById('formStatus');
 let emailjsLoaded = false;
 
-// Load EmailJS SDK with retry
+// Load EmailJS SDK
 function loadEmailJS(attempts = 0) {
   if (typeof emailjs !== 'undefined') {
-    emailjs.init('P1XWxtzxWqLj1mORs');
-    emailjsLoaded = true;
+    try {
+      emailjs.init('P1XWxtzxWqLj1mORs');
+      emailjsLoaded = true;
+      console.log('EmailJS loaded successfully');
+    } catch(e) {
+      console.error('EmailJS init failed:', e);
+    }
     return;
   }
-  if (attempts > 20) {
-    console.error('EmailJS failed to load');
+  if (attempts > 30) {
+    console.error('EmailJS SDK failed to load');
     return;
   }
   setTimeout(() => loadEmailJS(attempts + 1), 200);
 }
 
-// Wait for SDK then init
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadEmailJS);
 } else {
   loadEmailJS();
+}
+
+function openMailClient(name, email, subject, message) {
+  const mailSubject = encodeURIComponent(subject || 'Portfolio Enquiry from ' + name);
+  const mailBody = encodeURIComponent(
+    'Hi Ankith,\n\n' +
+    'You have received a new enquiry from your portfolio website.\n\n' +
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n' +
+    'Subject: ' + (subject || 'N/A') + '\n\n' +
+    'Message:\n' + message + '\n\n' +
+    '---\nSent via ankithkarkera.com contact form'
+  );
+  window.open('mailto:ankitkarkera42@gmail.com?subject=' + mailSubject + '&body=' + mailBody, '_blank');
 }
 
 if (contactForm) {
@@ -795,16 +813,21 @@ if (contactForm) {
       return;
     }
 
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    submitBtn.disabled = true;
+
+    // If EmailJS is not loaded, fall back to mailto immediately
     if (!emailjsLoaded || typeof emailjs === 'undefined') {
+      openMailClient(name, email, subject, message);
       formStatus.style.display = 'block';
-      formStatus.style.color = '#ef4444';
-      formStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Email service not loaded. Please refresh the page or email me directly at <a href="mailto:ankitkarkera42@gmail.com" style="color: var(--accent); text-decoration: underline;">ankitkarkera42@gmail.com</a>';
+      formStatus.style.color = 'var(--success)';
+      formStatus.innerHTML = '<i class="fas fa-check-circle"></i> Email client opened! Please send the email from your mail app. If it did not open, <a href="mailto:ankitkarkera42@gmail.com" style="color: var(--accent); text-decoration: underline;">click here</a>.';
+      contactForm.reset();
+      submitBtn.innerHTML = 'Send Message';
+      submitBtn.disabled = false;
       setTimeout(() => { formStatus.style.display = 'none'; }, 6000);
       return;
     }
-
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-    submitBtn.disabled = true;
 
     const templateParams = {
       to_name: 'Ankith',
@@ -815,7 +838,7 @@ if (contactForm) {
       message: message
     };
 
-    emailjs.send('service_4stgsed', 'template_2r3h9uq', templateParams)
+    emailjs.send('service_uybgdhq', 'template_2r3h9uq', templateParams)
       .then(function(response) {
         formStatus.style.display = 'block';
         formStatus.style.color = 'var(--success)';
@@ -827,14 +850,15 @@ if (contactForm) {
       })
       .catch(function(error) {
         console.error('EmailJS Error:', error);
-        let errorMsg = 'Something went wrong.';
-        if (error && error.text) errorMsg += ' (' + error.text + ')';
+        // If EmailJS fails (e.g. service not found), fall back to mailto
+        openMailClient(name, email, subject, message);
         formStatus.style.display = 'block';
-        formStatus.style.color = '#ef4444';
-        formStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + errorMsg + ' Please email me directly at <a href="mailto:ankitkarkera42@gmail.com" style="color: var(--accent); text-decoration: underline;">ankitkarkera42@gmail.com</a>';
+        formStatus.style.color = 'var(--warning)';
+        formStatus.innerHTML = '<i class="fas fa-info-circle"></i> Email service is being set up. Your email client was opened instead — please send the email from there. If it did not open, <a href="mailto:ankitkarkera42@gmail.com" style="color: var(--accent); text-decoration: underline;">click here</a>.';
+        contactForm.reset();
         submitBtn.innerHTML = 'Send Message';
         submitBtn.disabled = false;
-        setTimeout(() => { formStatus.style.display = 'none'; }, 6000);
+        setTimeout(() => { formStatus.style.display = 'none'; }, 8000);
       });
   });
 }
