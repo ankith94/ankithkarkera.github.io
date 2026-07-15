@@ -293,6 +293,7 @@ footer { padding: 3rem 5%; text-align: center; border-top: 1px solid var(--borde
 ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div class="bg-animation"></div>
@@ -751,19 +752,31 @@ footer { padding: 3rem 5%; text-align: center; border-top: 1px solid var(--borde
 
 <script>
 // EmailJS Contact Form - sends templated emails directly to your inbox
-(function() {
-  // Load EmailJS SDK
-  const script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
-  script.onload = function() {
-    emailjs.init('P1XWxtzxWqLj1mORs');
-  };
-  document.head.appendChild(script);
-})();
-
 const contactForm = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 const formStatus = document.getElementById('formStatus');
+let emailjsLoaded = false;
+
+// Load EmailJS SDK with retry
+function loadEmailJS(attempts = 0) {
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init('P1XWxtzxWqLj1mORs');
+    emailjsLoaded = true;
+    return;
+  }
+  if (attempts > 20) {
+    console.error('EmailJS failed to load');
+    return;
+  }
+  setTimeout(() => loadEmailJS(attempts + 1), 200);
+}
+
+// Wait for SDK then init
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadEmailJS);
+} else {
+  loadEmailJS();
+}
 
 if (contactForm) {
   contactForm.addEventListener('submit', function(e) {
@@ -779,6 +792,14 @@ if (contactForm) {
       formStatus.style.color = '#ef4444';
       formStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all required fields.';
       setTimeout(() => { formStatus.style.display = 'none'; }, 4000);
+      return;
+    }
+
+    if (!emailjsLoaded || typeof emailjs === 'undefined') {
+      formStatus.style.display = 'block';
+      formStatus.style.color = '#ef4444';
+      formStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Email service not loaded. Please refresh the page or email me directly at <a href="mailto:ankitkarkera42@gmail.com" style="color: var(--accent); text-decoration: underline;">ankitkarkera42@gmail.com</a>';
+      setTimeout(() => { formStatus.style.display = 'none'; }, 6000);
       return;
     }
 
@@ -802,7 +823,9 @@ if (contactForm) {
         submitBtn.innerHTML = 'Send Message';
         submitBtn.disabled = false;
         setTimeout(() => { formStatus.style.display = 'none'; }, 5000);
-      }, function(error) {
+      })
+      .catch(function(error) {
+        console.error('EmailJS Error:', error);
         formStatus.style.display = 'block';
         formStatus.style.color = '#ef4444';
         formStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Something went wrong. Please email me directly at <a href="mailto:ankitkarkera42@gmail.com" style="color: var(--accent); text-decoration: underline;">ankitkarkera42@gmail.com</a>';
